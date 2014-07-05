@@ -3,7 +3,7 @@
  * Connect SDK
  * 
  * Copyright (c) 2014 LG Electronics.
- * Created by Hyun Kook Khang on Jan 24 2014
+ * Created by Hyun Kook Khang on 24 Jan 2014
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,13 +70,6 @@ public class DIALService extends DeviceService implements Launcher {
 		registeredApps.add("Amazon");
 	}
 	
-	/**
-	 * Registers an app ID to be checked upon discovery of this device. If the app is found on the target device, the DIALService will gain the "Launcher.<appID>" capability, where <appID> is the value of the appId parameter.
-	 *
-	 * This method must be called before starting DiscoveryManager for the first time.
-	 *
-	 * @param appId ID of the app to be checked for
-	 */
 	public static void registerApp(String appId) {
 		if (!registeredApps.contains(appId))
 			registeredApps.add(appId);
@@ -227,10 +220,6 @@ public class DIALService extends DeviceService implements Launcher {
 			@Override
 			public void onSuccess(AppState state) {
 				String uri = requestURL(launchSession.getAppName());
-				
-				if (state.running) {
-					uri += "/run";
-				}
 				
 				ServiceCommand<ResponseListener<Object>> command = new ServiceCommand<ResponseListener<Object>>(launchSession.getService(), uri, null, listener);
 				command.setHttpMethod(ServiceCommand.TYPE_DEL);
@@ -495,13 +484,15 @@ public class DIALService extends DeviceService implements Launcher {
 	}
 	
 	@Override
-	protected void setCapabilities() {
-		appendCapabilites(
-				Application, 
-				Application_Params, 
-				Application_Close, 
-				AppState
-		);
+	protected void updateCapabilities() {
+		List<String> capabilities = new ArrayList<String>();
+
+		capabilities.add(Application);
+		capabilities.add(Application_Params);
+		capabilities.add(Application_Close);
+		capabilities.add(AppState);
+		
+		setCapabilities(capabilities);
 	}
 	
 	private void hasApplication(String appID, ResponseListener<Object> listener) {
