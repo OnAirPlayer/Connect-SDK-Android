@@ -197,7 +197,7 @@ public class DIALService extends DeviceService implements Launcher {
 			public void onSuccess(Object object) {
 				LaunchSession launchSession = LaunchSession.launchSessionForAppId(appInfo.getId());
 				launchSession.setAppName(appInfo.getName());
-				launchSession.setRawData(object);
+				launchSession.setSessionId((String)object);
 				launchSession.setService(DIALService.this);
 				launchSession.setSessionType(LaunchSessionType.App);
 				
@@ -221,6 +221,13 @@ public class DIALService extends DeviceService implements Launcher {
 			public void onSuccess(AppState state) {
 				String uri = requestURL(launchSession.getAppName());
 				
+				if (launchSession.getSessionId().contains("http://") || launchSession.getSessionId().contains("https://"))
+					uri = launchSession.getSessionId();
+				else if (launchSession.getSessionId().endsWith("run") || launchSession.getSessionId().endsWith("run/"))
+					uri = requestURL(launchSession.getAppId() + "/run");
+				else
+					uri = requestURL(launchSession.getSessionId());
+				
 				ServiceCommand<ResponseListener<Object>> command = new ServiceCommand<ResponseListener<Object>>(launchSession.getService(), uri, null, listener);
 				command.setHttpMethod(ServiceCommand.TYPE_DEL);
 				command.send();
@@ -239,8 +246,10 @@ public class DIALService extends DeviceService implements Launcher {
 		AppInfo appInfo = new AppInfo("YouTube");
 		appInfo.setName(appInfo.getId());
 
-		if (contentId != null && contentId.length() > 0)
-			params = String.format("v=%s&t=0.0", contentId);
+		if (contentId != null && contentId.length() > 0) {
+			String pairingCode = java.util.UUID.randomUUID().toString();
+			params = String.format("pairingCode=%s&v=%s&t=0.0", pairingCode, contentId);
+		}
 
 		launchAppWithInfo(appInfo, params, listener);
 	}
@@ -351,6 +360,16 @@ public class DIALService extends DeviceService implements Launcher {
 	}
 	
 	@Override
+	public void closeLaunchSession(LaunchSession launchSession, ResponseListener<Object> listener) {
+		if (launchSession.getSessionType() == LaunchSessionType.App) {
+			this.getLauncher().closeApp(launchSession, listener);
+		} else
+		{
+			Util.postError(listener, new ServiceCommandError(-1, "Could not find a launcher associated with this LaunchSession", launchSession));
+		}
+	}
+	
+	@Override
 	public boolean isConnectable() {
 		return true;
 	}
@@ -441,11 +460,15 @@ public class DIALService extends DeviceService implements Launcher {
 					
 					code = response.getStatusLine().getStatusCode();
 					
-					if ( code == 200 || code == 201) { 
+					if ( code == 200) { 
 			            HttpEntity entity = response.getEntity();
 			            String message = EntityUtils.toString(entity, "UTF-8");
 
 						Util.postSuccess(command.getResponseListener(), message);
+					} else if (code == 201) {
+						String locationPath = response.getHeaders("Location")[0].getValue();
+						
+						Util.postSuccess(command.getResponseListener(), locationPath);
 					}
 					else {
 						Util.postError(command.getResponseListener(), ServiceCommandError.getError(code));

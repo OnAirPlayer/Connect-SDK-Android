@@ -260,7 +260,8 @@ public class WebOSWebAppSession extends WebAppSession {
 			
 			@Override
 			public void run() {
-				getWebAppSessionListener().onReceiveMessage(WebOSWebAppSession.this, message);
+				if (getWebAppSessionListener() != null)
+					getWebAppSessionListener().onReceiveMessage(WebOSWebAppSession.this, message);
 			}
 		});
 		
@@ -328,8 +329,8 @@ public class WebOSWebAppSession extends WebAppSession {
 					public void onError(ServiceCommandError error) {
 						disconnectFromWebApp();
 						
-						if (mConnectionListener != null)
-							mConnectionListener.onError(error);
+						if (connectionListener != null)
+							connectionListener.onError(error);
 					}
 					
 					@Override
