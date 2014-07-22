@@ -20,21 +20,6 @@
 
 package com.connectsdk.discovery;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Timer;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -51,21 +36,30 @@ import com.connectsdk.device.ConnectableDeviceListener;
 import com.connectsdk.device.ConnectableDeviceStore;
 import com.connectsdk.device.DefaultConnectableDeviceStore;
 import com.connectsdk.discovery.provider.CastDiscoveryProvider;
-import com.connectsdk.discovery.provider.SSDPDiscoveryProvider;
-import com.connectsdk.discovery.provider.ZeroconfDiscoveryProvider;
-import com.connectsdk.service.AirPlayService;
 import com.connectsdk.service.CastService;
-import com.connectsdk.service.DIALService;
 import com.connectsdk.service.DLNAService;
 import com.connectsdk.service.DeviceService;
 import com.connectsdk.service.DeviceService.PairingType;
 import com.connectsdk.service.NetcastTVService;
-import com.connectsdk.service.RokuService;
-import com.connectsdk.service.WebOSTVService;
 import com.connectsdk.service.command.ServiceCommandError;
 import com.connectsdk.service.config.ServiceConfig;
 import com.connectsdk.service.config.ServiceConfig.ServiceConfigListener;
 import com.connectsdk.service.config.ServiceDescription;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Timer;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * ###Overview
@@ -362,13 +356,13 @@ public class DiscoveryManager implements ConnectableDeviceListener, DiscoveryPro
 	 *   + AirPlayService
 	 */
 	public void registerDefaultDeviceTypes() {
-		registerDeviceService(WebOSTVService.class, SSDPDiscoveryProvider.class);
+//		registerDeviceService(WebOSTVService.class, SSDPDiscoveryProvider.class);
 //		registerDeviceService(NetcastTVService.class, SSDPDiscoveryProvider.class);
-		registerDeviceService(DLNAService.class, SSDPDiscoveryProvider.class); //  includes Netcast
-		registerDeviceService(DIALService.class, SSDPDiscoveryProvider.class);
-		registerDeviceService(RokuService.class, SSDPDiscoveryProvider.class);
+//		registerDeviceService(DLNAService.class, SSDPDiscoveryProvider.class); //  includes Netcast
+//		registerDeviceService(DIALService.class, SSDPDiscoveryProvider.class);
+//		registerDeviceService(RokuService.class, SSDPDiscoveryProvider.class);
 		registerDeviceService(CastService.class, CastDiscoveryProvider.class);
-		registerDeviceService(AirPlayService.class, ZeroconfDiscoveryProvider.class);
+//		registerDeviceService(AirPlayService.class, ZeroconfDiscoveryProvider.class);
 	}
 	
 	/**
