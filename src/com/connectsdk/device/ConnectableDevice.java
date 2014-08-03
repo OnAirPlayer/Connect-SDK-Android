@@ -904,11 +904,12 @@ public class ConnectableDevice implements DeviceServiceListener {
 	}
 	
 	public void update(ServiceDescription description) {
+		setId(description.getUUID());
 		setIpAddress(description.getIpAddress());
 		setFriendlyName(description.getFriendlyName());
 		setModelName(description.getModelName());
 		setModelNumber(description.getModelNumber());
-		setLastConnected(description.getLastDetection());
+		setLastConnected(description.getLastDetection());		
 	}
 
 	public JSONObject toJSONObject() {
