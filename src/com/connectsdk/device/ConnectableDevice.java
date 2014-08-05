@@ -20,17 +20,6 @@
 
 package com.connectsdk.device;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.connectsdk.core.Util;
 import com.connectsdk.discovery.DiscoveryManager;
 import com.connectsdk.service.DeviceService;
@@ -50,6 +39,17 @@ import com.connectsdk.service.capability.VolumeControl;
 import com.connectsdk.service.capability.WebAppLauncher;
 import com.connectsdk.service.command.ServiceCommandError;
 import com.connectsdk.service.config.ServiceDescription;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * ###Overview
@@ -904,7 +904,6 @@ public class ConnectableDevice implements DeviceServiceListener {
 	}
 	
 	public void update(ServiceDescription description) {
-		setId(description.getUUID());
 		setIpAddress(description.getIpAddress());
 		setFriendlyName(description.getFriendlyName());
 		setModelName(description.getModelName());
