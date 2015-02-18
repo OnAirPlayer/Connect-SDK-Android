@@ -1,3 +1,18 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+
+	dependencies {
+		classpath 'com.android.tools.build:gradle:1.0.0'
+	}
+}
+
+// Must be defined a second time for command line builds to resolve remote dependencies
+repositories {
+	mavenCentral()
+}
+
 apply plugin: 'com.android.library'
 
 android {
@@ -25,6 +40,10 @@ android {
             minifyEnabled false
         }
     }
+
+	lintOptions {
+		abortOnError false
+	}
 }
 
 dependencies {
