@@ -12,6 +12,7 @@
 bin/
 gen/
 *.iml
+.idea/
 
 # Ignore gradle files
 .gradle/
